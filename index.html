@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0b1e4b">
+  <title>رائد الفضاء الحسابي</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <canvas id="game"></canvas>
+
+  <div id="hud" class="overlay hidden">
+    <div class="hud-row">
+      <div class="hud-chip">★ <b id="hudScore">0</b></div>
+      <div class="hud-chip">★ <b id="hudBest">0</b></div>
+      <div class="hud-chip hidden" id="chipCombo">سلسلة ×<b id="hudCombo">1</b></div>
+      <div class="hud-chip" id="chipHearts"></div>
+      <div class="hud-chip chip-title" id="chipTitle"></div>
+    </div>
+    <div class="hud-bar"><div id="hudBar"></div></div>
+  </div>
+
+  <div id="questionBox" class="overlay hidden"><div id="questionText"></div></div>
+  <div id="banner" class="overlay hidden"></div>
+
+  <button id="fireBtn" class="fire-btn hidden" aria-label="إطلاق الليزر">إطلاق</button>
+  <button id="exitBtn" class="exit-btn hidden" data-action="menu" aria-label="خروج">✕</button>
+
+  <div id="matchBox" class="overlay hidden">
+    <div class="match-head">
+      <span>أخطاء: <b id="matchMisses">0</b></span>
+      <span>أزواج: <b id="matchDone">0 / 6</b></span>
+    </div>
+    <div class="match-row">
+      <div id="matchA" class="match-col"></div>
+      <div id="matchB" class="match-col"></div>
+    </div>
+  </div>
+
+  <div id="memBox" class="overlay hidden">
+    <div class="match-head">
+      <span>أخطاء: <b id="memMisses">0</b></span>
+      <span>أزواج: <b id="memDone">0 / 4</b></span>
+    </div>
+    <div id="memGrid" class="mem-grid"></div>
+  </div>
+
+  <div id="mainMenu" class="overlay panel hidden">
+    <div class="rocket-logo">★</div>
+    <h1 class="glow">رائد الفضاء الحسابي</h1>
+    <p class="tagline">التقط الفقاعة التي تحمل الإجابة الصحيحة، وأكمل رحلتك بين الكواكب!</p>
+    <button class="btn btn-primary" data-action="sections">ابدأ المراحل</button>
+    <button class="btn" data-action="endless">التحدي اللامتناهي</button>
+    <button class="btn btn-ghost" data-action="howto">كيف ألعب؟</button>
+    <button class="btn btn-ghost" data-action="leaderboard">لوحة الأبطال</button>
+    <button class="btn btn-ghost" id="btnSound" data-action="sound">الصوت: يعمل</button>
+    <p class="best-line">أعلى نتيجة في التحدي اللامتناهي: <b id="menuBest">0</b></p>
+    <a class="copyright" href="https://bashartwaij.com" target="_blank" rel="noopener">حقوق BasharTwaij</a>
+  </div>
+
+  <div id="worldsMenu" class="overlay panel hidden">
+    <h2 class="glow">اختر كوكبك</h2>
+    <div id="worldGrid"></div>
+    <button class="btn btn-ghost" data-action="menu">رجوع</button>
+  </div>
+
+  <div id="sectionsMenu" class="overlay panel hidden">
+    <h2 class="glow">مراحل رائد الفضاء</h2>
+    <div class="sec-tabs">
+      <button class="sec-tab active" data-sec-tab="skills">المهارات</button>
+      <button class="sec-tab" data-sec-tab="modes">أساليب اللعب</button>
+      <button class="sec-tab" data-sec-tab="adv">المغامرة</button>
+    </div>
+    <h3 class="sec-title" id="secTitle">أقسام المهارات</h3>
+    <div id="secGrid"></div>
+    <button class="btn btn-ghost" data-action="menu">رجوع</button>
+  </div>
+
+  <div id="howTo" class="overlay panel hidden">
+    <h2 class="glow">كيف ألعب؟</h2>
+    <ul class="howto-list">
+      <li>حرّك الصاروخ بأسهم لوحة المفاتيح <b>→</b> و <b>←</b></li>
+      <li>على الجوال: اسحب إصبعك على الشاشة لتحريك الصاروخ</li>
+      <li>اقرأ السؤال في الأعلى والتقط الفقاعة بالإجابة الصحيحة</li>
+      <li>كل إجابة صحيحة تزيد نقاطك وتقوّي سلسلة النقاط حتى ×3</li>
+      <li>اضغط <b>مسافة</b> أو زر <b>إطلاق</b> لإصابة الإجابة الصحيحة بالليزر والحصول على النقاط</li>
+      <li>احذر! إصابة إجابة خاطئة بالليزر تفقدك قلبه</li>
+      <li>إذا التقطت إجابة خاطئة تخسر قلبه، وثلاث قلوب تنهي اللعبة</li>
+      <li>أجب عن 10 أسئلة لتكمل الكوكب وتحصل على النجوم</li>
+      <li>اضغط <b>P</b> أو <b>Esc</b> لإيقاف اللعبة مؤقتاً</li>
+    </ul>
+    <button class="btn btn-primary" data-action="menu">فهمت!</button>
+  </div>
+
+  <div id="worldComplete" class="overlay panel hidden">
+    <h2 class="glow" id="wcTitle">أحسنت!</h2>
+    <div id="wcStars" class="stars-row"></div>
+    <p id="wcScore" class="best-line"></p>
+    <div id="wcNameBox" class="name-box hidden">
+      <label class="name-label" for="wcName">اسمك يا بطل:</label>
+      <input id="wcName" class="name-input" maxlength="20" placeholder="اكتب اسمك هنا">
+      <button class="btn btn-ghost" id="btnSaveWc">ربط اسمي بالنتيجة</button>
+    </div>
+    <p id="wcAutoMsg" class="auto-note hidden">نقاطك سُجلت تلقائياً — اكتب اسمك لترتبط بها في لوحة الأبطال</p>
+    <p id="wcSavedMsg" class="hidden best-line">تم! تظهر نتيجتك باسمك في لوحة الأبطال</p>
+    <button class="btn btn-primary" id="btnStageNext" data-action="stageNext">الكوكب التالي</button>
+    <button class="btn btn-ghost" data-action="menu">القائمة الرئيسية</button>
+  </div>
+
+  <div id="gameOver" class="overlay panel hidden">
+    <h2 class="glow" id="goTitle">انتهت الرحلة!</h2>
+    <p id="goInfo" class="best-line"></p>
+    <div id="goStars" class="stars-row"></div>
+    <div id="goNameBox" class="name-box hidden">
+      <label class="name-label" for="goName">اسمك يا بطل:</label>
+      <input id="goName" class="name-input" maxlength="20" placeholder="اكتب اسمك هنا">
+      <button class="btn btn-ghost" id="btnSaveGo">ربط اسمي بالنتيجة</button>
+    </div>
+    <p id="goAutoMsg" class="auto-note hidden">نقاطك سُجلت تلقائياً — اكتب اسمك لترتبط بها في لوحة الأبطال</p>
+    <p id="goSavedMsg" class="hidden best-line">تم! تظهر نتيجتك باسمك في لوحة الأبطال</p>
+    <button class="btn btn-primary" data-action="retry">حاول مرة أخرى</button>
+    <button class="btn btn-ghost" data-action="menu">القائمة الرئيسية</button>
+  </div>
+
+  <div id="leaderMenu" class="overlay panel hidden">
+    <h2 class="glow">لوحة الأبطال</h2>
+    <div id="leaderList" class="leader-list"></div>
+    <button class="btn btn-ghost" data-action="menu">رجوع</button>
+  </div>
+
+  <div id="pauseMenu" class="overlay panel hidden">
+    <h2 class="glow">استراحة</h2>
+    <button class="btn btn-primary" data-action="resume">استئناف اللعب</button>
+    <button class="btn btn-ghost" data-action="menu">القائمة الرئيسية</button>
+  </div>
+
+  <script src="js/questions.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
