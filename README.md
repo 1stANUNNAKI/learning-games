@@ -151,7 +151,8 @@ node server.js
 
 ## 🔗 الروابط
 
-- [الموقع](https://bashartwaij.com)
+- [الموقع الرسمي للمطور](https://bashartwaij.com)
+- [اللعبة اونلاين](https://g.bashartwaij.com)
 - [GitHub](https://github.com/basharalameed/learning-games)
 - [Netlify Demo](https://your-site.netlify.app)
 
